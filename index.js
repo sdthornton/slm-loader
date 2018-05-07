@@ -10,11 +10,11 @@ module.exports = function(source) {
   this.cacheable && this.cacheable(true);
 
   var resolveRoot = this.options && this.options.resolve && this.options.resolve.root;
-  var options = loaderUtils.getLoaderConfig(this, 'slmLoader') || {};
+  var options = loaderUtils.getOptions(this, 'slmLoader') || {};
   if (!options.basePath && resolveRoot) options.basePath = resolveRoot;
   options.filename = this.resource;
   var tmplFunc = slm.compile(source, options);
-  
+
   // watch for changes in every referenced file
   Object.keys(slm.template.VM.prototype._cache).forEach(function(dep) {
     this.addDependency(dep);
@@ -29,6 +29,6 @@ module.exports = function(source) {
   Object.keys(slm.template.VM.prototype._cache).forEach(function(dep) {
     delete slm.template.VM.prototype._cache[dep];
   });
-  
+
   return tmplFunc();
 };
